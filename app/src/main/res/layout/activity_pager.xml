@@ -2,40 +2,112 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    <ImageView
-        android:src="@drawable/intro_background"
-        android:scaleType="centerCrop"
+    <ScrollView
+        android:id="@+id/paralax"
+        android:scrollbars="none"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-    <TextView
-        android:id="@+id/first_content"
-        android:text="Hello, wordl!"
-        android:layout_centerInParent="true"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/paralax_image"
+            android:scaleType="centerCrop"
+            android:src="@drawable/intro_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+    <ImageView
+        android:id="@+id/back_to_top_arrow"
+        android:src="@drawable/intro_arrow"
+        android:scaleType="centerInside"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/back_to_top"
         android:textColor="#fff"
-        android:textSize="40sp"
+        android:layout_alignRight="@id/back_to_top"
+        android:layout_alignLeft="@+id/back_to_top"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp" />
+    <ImageView
+        android:id="@+id/welcome_logo"
+        android:layout_above="@+id/welcome_text"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/intro_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/last_content"
-        android:text="Bye, wordl!"
-        android:alpha="0"
+    <LinearLayout
+        android:id="@+id/welcome_text"
+        android:paddingTop="40dp"
+        android:paddingBottom="30dp"
+        android:orientation="vertical"
+        android:gravity="center"
         android:layout_centerInParent="true"
-        android:textColor="#fff"
-        android:textSize="40sp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <im.actor.tour.impl1.PagerContainer
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="Do you enjoy it?"
+            android:textColor="#fff"
+            android:textSize="20sp"
+            android:paddingBottom="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="Start using actor now!"
+            android:textColor="#fff"
+            android:paddingTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <im.actor.tour.PagerContainer
         android:clipToPadding="false"
         android:paddingBottom="-100dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <im.actor.tour.impl1.VerticalViewPager
+        <im.actor.tour.VerticalViewPager
             android:id="@+id/viewpager"
             android:layout_gravity="center"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-        </im.actor.tour.impl1.PagerContainer>
+    </im.actor.tour.PagerContainer>
     <LinearLayout
+        android:id="@+id/login_holder"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:layout_below="@+id/welcome_text"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/signup"
+            android:text="sign up"
+            android:textColor="#fff"
+            android:textSize="14sp"
+            android:background="@drawable/signup"
+            android:textAllCaps="true"
+            android:layout_marginBottom="12dp"
+            android:layout_width="145dp"
+            android:layout_height="35dp" />
+        <Button
+            android:id="@+id/signin"
+            android:text="Sign in"
+            android:layout_marginTop="12dp"
+            android:textColor="#fff"
+            android:textAllCaps="false"
+            android:background="#00000000"
+            android:layout_width="145dp"
+            android:layout_height="35dp" />
+    </LinearLayout>
+    <TextView
+        android:id="@+id/back_to_top"
+        android:text="Back to the top"
+        android:textColor="#fff"
+        android:alpha="0"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:padding="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <!--LinearLayout
         android:gravity="right"
         android:orientation="vertical"
         android:layout_alignParentRight="true"
@@ -45,26 +117,29 @@
         <TextView
             android:text="debug"
             android:textColor="#fff"
+            android:gravity="right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:text="debug"
-            android:id="@+id/status_scroll"
+            android:id="@+id/status1"
             android:gravity="right"
             android:textColor="#fff"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:text="debug"
-            android:id="@+id/status_selected"
+            android:id="@+id/status2"
             android:textColor="#fff"
+            android:gravity="right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <TextView
             android:text="debug"
-            android:id="@+id/status_scroll_state"
+            android:id="@+id/status3"
             android:textColor="#fff"
+            android:gravity="right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-    </LinearLayout>
+    </LinearLayout-->
 </RelativeLayout>
