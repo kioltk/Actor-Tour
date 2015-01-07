@@ -4,8 +4,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Toast;
@@ -17,6 +15,7 @@ public class PagerActivity extends ActionBarActivity {
     private static final int SIGNIN_LAST = 2;
     private static final int SIGNUP = 3;
     private static final int SIGNUP_LAST = 4;
+    private int lastPageIndex = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +35,14 @@ public class PagerActivity extends ActionBarActivity {
         final View paralaxImage =  findViewById(R.id.paralax_image);
 
         final View loginHolder = findViewById(R.id.login_holder);
+        final View loginHolderBackground = findViewById(R.id.login_holder_background);
         final View welcomeImage = findViewById(R.id.welcome_logo);
         final View welcomeText = findViewById(R.id.welcome_text);
 
-        View signinView = findViewById(R.id.signin);
-        View signupView = findViewById(R.id.signup);
-        View signinLastView = findViewById(R.id.signin_last);
-        View signupLastView = findViewById(R.id.signup_last);
+        final View signinView = findViewById(R.id.signin);
+        final View signupView = findViewById(R.id.signup);
+        final View signinLastView = findViewById(R.id.signin_last);
+        final View signupLastView = findViewById(R.id.signup_last);
 
         signinView.setOnClickListener(new LoginClickListener(SIGNIN));
         signinLastView.setOnClickListener(new LoginClickListener(SIGNIN_LAST));
@@ -64,16 +64,16 @@ public class PagerActivity extends ActionBarActivity {
 
         viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @Override
-            public Fragment getItem(int poistion) {
-                if(poistion == 0 || poistion == 4)
+            public Fragment getItem(int position) {
+                if(position == 0 || position == lastPageIndex + 1)
                     return new Fragment();
 
-                return TourFragment.getInstance(poistion);
+                return TourFragment.getInstance(position);
             }
 
             @Override
             public int getCount() {
-                return 5;
+                return 5;//6;
             }
         });
 
@@ -96,7 +96,6 @@ public class PagerActivity extends ActionBarActivity {
 
             @Override
             public void onScroll(int y, float page) {
-                //status3.setText("\ny: " + y + "\nyOffset: " + page);
 
                 if (page < 1) {
                     float alpha = 1 - page * 2;
@@ -105,6 +104,7 @@ public class PagerActivity extends ActionBarActivity {
                     if (loginHolder.getTop() != 0) {
                         float loginY = (float) ((float) 1 - (page));
                         loginHolder.animate().y(loginHolder.getTop() * loginY).setDuration(0).setStartDelay(0).start();
+                        loginHolderBackground.animate().alpha(page).setDuration(0).start();
                         loginHolderStatus = LOGINHOLDER_STATUS_VISIBLE;
                         float welcomeImageY = welcomeImage.getTop()-y/2;
                         float welcomeTextY = welcomeText.getTop()-y/2;
@@ -117,90 +117,75 @@ public class PagerActivity extends ActionBarActivity {
                         }
                     }
                    mainContentHidden = false;
-                }
-                if (page >= 1 && page <= 3) {
-                    if (!mainContentHidden) {
-                        mainContentHidden = true;
-                        loginHolder.animate().y(0).setDuration(0).start();
-                        welcomeImage.animate().alpha(0).setDuration(0).start();
-                        welcomeText.animate().alpha(0).setDuration(0).start();
-                        backToTopArrow.animate().alpha(0).setDuration(0).start();
-                        backToTopText.animate().alpha(0).setDuration(0).start();
-                        lastPage.animate().alpha(0).setDuration(0).start();
-                    }
-                }
-                if (page > 3) {
-                    float progress = page - 3;
-                    float alpha = (page - 3) * 2 - 1;
-                    if (alpha > 0) {
-                        backToTopText.animate().alpha(alpha).setDuration(0).start();
-                        backToTopArrow.animate().alpha(alpha).setDuration(0).start();
-                    }
-                    float welcomeImageScale = ((progress)/(4) +0.8f); //kinda delay
-                    if (welcomeImageScale > 1) {
-                        welcomeImageScale = 1;
-                    }
-                    //status1.setText("progress:" + progress);
+                }else {
+                    if (page >= 1 && page <= lastPageIndex) {
+                        // todo freeze?
+                        if (!mainContentHidden) {
+                            mainContentHidden = true;
 
-                    if (progress > 0.5) {
-                        if (loginHolderStatus == LOGINHOLDER_STATUS_VISIBLE) {
-                            loginHolderStatus = LOGINHOLDER_STATUS_OUT;
-                            loginHolder.animate().y(-loginHolder.getHeight()).setDuration(200).setInterpolator(new AccelerateDecelerateInterpolator()).setStartDelay(0).start();
-                        }
-                        float halfprogress = progress * 2 - 1;
-                        if (halfprogress < 0) {
-                            halfprogress = 0;
-                        }
+                            //signinLastView.setEnabled(false);
+                            signinView.setEnabled(false);
+                            //signupLastView.setEnabled(false);
+                            signupView.setEnabled(false);
+                            loginHolder.animate().y(0).setDuration(0).start();
+                            loginHolderBackground.animate().alpha(1).setDuration(0).start();
 
-                        mainContentHidden = false;
-                        lastPage.animate()
-                                //.scaleX(welcomeImageScale).scaleY(welcomeImageScale)
-                                .y(lastPage.getHeight()/2*((1-halfprogress))).alpha(halfprogress).setDuration(0).start();
-
-
-
-                        //welcomeImage.animate().alpha(welcomeImageAlpha).setDuration(0).start();
-
-                        /*if(progress>0.9) {
-                            if (!welcomeShowed) {
-                                welcomeShowed = true;
-
-                                welcomeImage.setAlpha(1);
-                                welcomeText.setAlpha(1);
-
-                                AnimationSet imageAnimationSet = new AnimationSet(true);
-                                imageAnimationSet.setDuration(300);
-                                imageAnimationSet.setInterpolator(new AccelerateDecelerateInterpolator());
-                                imageAnimationSet.addAnimation(new AlphaAnimation(0, 1));
-                                imageAnimationSet.addAnimation(new ScaleAnimation(0.5f, 1, 0.5f, 1, Animation.RELATIVE_TO_SELF, (float) 0.5, Animation.RELATIVE_TO_SELF, 0.5f));
-                                welcomeImage.startAnimation(imageAnimationSet);
-
-
-                                AnimationSet textAnimationSet = new AnimationSet(true);
-                                textAnimationSet.setDuration(300);
-                                textAnimationSet.setStartOffset(250);
-                                textAnimationSet.setInterpolator(new DecelerateInterpolator());
-                                textAnimationSet.addAnimation(new AlphaAnimation(0, 1));
-                                textAnimationSet.addAnimation(new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0));
-                                welcomeText.startAnimation(textAnimationSet);
-                            }
-                        } else {
-                            welcomeShowed = false;
-
-                        }*/
-                    } else {
-                        if (loginHolderStatus == LOGINHOLDER_STATUS_OUT) {
-                            loginHolderStatus = LOGINHOLDER_STATUS_VISIBLE;
-                            loginHolder.animate().y(0).setInterpolator(new AccelerateDecelerateInterpolator()).setDuration(200).setStartDelay(0).start();
-                        }
-                        if(!mainContentHidden){
+                            welcomeImage.animate().alpha(0).setDuration(0).start();
+                            welcomeText.animate().alpha(0).setDuration(0).start();
+                            backToTopArrow.animate().alpha(0).setDuration(0).start();
+                            backToTopText.animate().alpha(0).setDuration(0).start();
                             lastPage.animate().alpha(0).setDuration(0).start();
                         }
+                    } else {
+                        if (page > lastPageIndex) {
+                            float progress = page - lastPageIndex;
+                            float alpha = (page - lastPageIndex) * 2 - 1;
+                            if (alpha > 0) {
+                                backToTopText.animate().alpha(alpha).setDuration(0).start();
+                                backToTopArrow.animate().alpha(alpha).setDuration(0).start();
+                            }
+                            float welcomeImageScale = ((progress) / (10f/3f) + 0.6f); //kinda offset
+                            if (welcomeImageScale > 1) {
+                                welcomeImageScale = 1;
+                            }
+                            lastPage.animate()
+                                    .scaleX(welcomeImageScale).scaleY(welcomeImageScale)
+                                    .y(lastPage.getHeight() * 0.6f * ((1 - progress))).alpha(progress).setDuration(0).start();
+
+                            if (progress > 0.5) {
+                                if (loginHolderStatus == LOGINHOLDER_STATUS_VISIBLE) {
+                                    loginHolderStatus = LOGINHOLDER_STATUS_OUT;
+                                    loginHolder.animate().y(-loginHolder.getHeight()).setDuration(200).setInterpolator(new AccelerateDecelerateInterpolator()).setStartDelay(0).start();
+                                }
+                                float halfprogress = progress * 2 - 1;
+                                if (halfprogress < 0) {
+                                    halfprogress = 0;
+                                }
+
+                                mainContentHidden = false;
+
+
+
+                            } else {
+                                if (loginHolderStatus == LOGINHOLDER_STATUS_OUT) {
+                                    loginHolderStatus = LOGINHOLDER_STATUS_VISIBLE;
+                                    loginHolder.animate().y(0).setInterpolator(new AccelerateDecelerateInterpolator()).setDuration(200).setStartDelay(0).start();
+                                }
+                                if (!mainContentHidden) {
+                                    // lastPage.animate().alpha(0).setDuration(0).start();
+                                    backToTopArrow.animate().alpha(0).setDuration(0).start();
+                                    backToTopText.animate().alpha(0).setDuration(0).start();
+                                }
+                            }
+                        }
                     }
                 }
 
-                //paralax.scrollTo(0, (int) (paralax.getHeight()*(page/10)));
-                paralaxImage.animate().y(-(((float) paralax.getHeight()) * ((float) page / 10))).setDuration(0).setStartDelay(0).start();
+                // paralax.scrollTo(0, (int) (paralax.getHeight()*(page/10)));
+                int paralaxHolderHeight = paralax.getHeight();
+                int paralaxImageHeight = paralaxImage.getHeight();
+                float paralaxY = -(((float)  paralaxImageHeight - paralaxHolderHeight ) * ((float) page / (lastPageIndex)));
+                paralaxImage.animate().y(paralaxY).setDuration(0).setStartDelay(0).start();
 
             }
         });

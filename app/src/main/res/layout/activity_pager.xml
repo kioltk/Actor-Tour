@@ -26,6 +26,17 @@
         android:layout_alignLeft="@+id/back_to_top"
         android:layout_width="wrap_content"
         android:layout_height="20dp" />
+    <TextView
+        android:id="@+id/back_to_top"
+        android:text="Back to the top"
+        android:textColor="#fff"
+        android:alpha="0"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:padding="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <ImageView
         android:id="@+id/welcome_logo"
         android:layout_above="@+id/welcome_text"
@@ -114,6 +125,7 @@
             <Button
                 android:id="@+id/signup_last"
                 android:text="sign up"
+                android:enabled="false"
                 android:textColor="#fff"
                 android:textSize="14sp"
                 android:background="@drawable/signup"
@@ -124,6 +136,7 @@
             <Button
                 android:id="@+id/signin_last"
                 android:text="Sign in"
+                android:enabled="false"
                 android:layout_marginTop="12dp"
                 android:textColor="#fff"
                 android:textAllCaps="false"
@@ -133,20 +146,28 @@
         </LinearLayout>
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/login_holder"
+
         android:orientation="vertical"
-        android:gravity="center"
-        android:paddingTop="20dp"
         android:layout_below="@+id/welcome_text"
         android:layout_centerHorizontal="true"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <View
+            android:id="@+id/login_holder_background"
+            android:background="#4b6e99"
+            android:alpha="0"
+            android:layout_width="match_parent"
+            android:layout_height="136dp"/>
         <Button
             android:id="@+id/signup"
+            android:enabled="false"
             android:text="sign up"
             android:textColor="#fff"
             android:textSize="14sp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
             android:background="@drawable/signup"
             android:textAllCaps="true"
             android:layout_marginBottom="12dp"
@@ -154,25 +175,19 @@
             android:layout_height="35dp" />
         <Button
             android:id="@+id/signin"
+            android:enabled="false"
+            android:layout_below="@+id/signup"
             android:text="Sign in"
             android:layout_marginTop="12dp"
             android:textColor="#fff"
+            android:layout_centerHorizontal="true"
             android:textAllCaps="false"
             android:background="#00000000"
             android:layout_width="145dp"
             android:layout_height="35dp" />
-    </LinearLayout>
-    <TextView
-        android:id="@+id/back_to_top"
-        android:text="Back to the top"
-        android:textColor="#fff"
-        android:alpha="0"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:padding="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
     <!--LinearLayout
         android:gravity="right"
         android:orientation="vertical"

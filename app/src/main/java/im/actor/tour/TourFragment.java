@@ -47,6 +47,11 @@ public class TourFragment extends Fragment {
                 bodyView.setText("Rest assured no one will read your messages. Share documents, files and photos without fear that they could fall into the wrong hands.");
                 imageView.setImageResource(R.drawable.intro_secure);
                 break;
+            case 4:
+                titleView.setText("Click login above ^^");
+                bodyView.setText("Much like actor");
+                //imageView.setImageResource(R.drawable.ic_launcher);
+                break;
         }
 
         return rootView;

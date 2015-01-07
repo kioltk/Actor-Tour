@@ -83,7 +83,7 @@ public class PagerContainer extends FrameLayout implements ViewPager.OnPageChang
     public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
         //Force the container to redraw on scrolling.
         //Without this the outer pages render initially and then stay static
-        if (mNeedsRedraw) invalidate();
+        //if (mNeedsRedraw) invalidate();
     }
 
     @Override
@@ -91,6 +91,6 @@ public class PagerContainer extends FrameLayout implements ViewPager.OnPageChang
 
     @Override
     public void onPageScrollStateChanged(int state) {
-        mNeedsRedraw = (state != ViewPager.SCROLL_STATE_IDLE);
+        //mNeedsRedraw = (state != ViewPager.SCROLL_STATE_IDLE);
     }
 }
