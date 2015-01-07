@@ -7,17 +7,23 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Toast;
 
 
 public class PagerActivity extends ActionBarActivity {
+
+    private static final int SIGNIN = 1;
+    private static final int SIGNIN_LAST = 2;
+    private static final int SIGNUP = 3;
+    private static final int SIGNUP_LAST = 4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pager);
 
-
+        final View lastPage = findViewById(R.id.last_page);
         final VerticalViewPager viewPager = (VerticalViewPager) findViewById(R.id.viewpager);
         //final TextView status1 = (TextView) findViewById(R.id.status1);
         //final TextView status2 = (TextView) findViewById(R.id.status2);
@@ -33,11 +39,23 @@ public class PagerActivity extends ActionBarActivity {
         final View welcomeImage = findViewById(R.id.welcome_logo);
         final View welcomeText = findViewById(R.id.welcome_text);
 
+        View signinView = findViewById(R.id.signin);
+        View signupView = findViewById(R.id.signup);
+        View signinLastView = findViewById(R.id.signin_last);
+        View signupLastView = findViewById(R.id.signup_last);
+
+        signinView.setOnClickListener(new LoginClickListener(SIGNIN));
+        signinLastView.setOnClickListener(new LoginClickListener(SIGNIN_LAST));
+        signupView.setOnClickListener(new LoginClickListener(SIGNUP));
+        signupLastView.setOnClickListener(new LoginClickListener(SIGNUP_LAST));
+
+
         View.OnClickListener jumpToTopListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 backToTopArrow.animate().alpha(0).setDuration(0).start();
                 backToTopText.animate().alpha(0).setDuration(0).start();
+                lastPage.animate().alpha(0).setDuration(0).start();
                 viewPager.setCurrentItem(1, true);
             }
         };
@@ -74,7 +92,7 @@ public class PagerActivity extends ActionBarActivity {
             public static final int LOGINHOLDER_STATUS_VISIBLE = 2;
             public int loginHolderStatus;
             public boolean welcomeShowed = false;
-            public boolean mainHided = false;
+            public boolean mainContentHidden = false;
 
             @Override
             public void onScroll(int y, float page) {
@@ -84,48 +102,65 @@ public class PagerActivity extends ActionBarActivity {
                     float alpha = 1 - page * 2;
                     backToTopArrow.setAlpha(alpha);
                     //status1.setText("alpha:" + alpha);
-                    if(loginHolder.getTop()!=0) {
+                    if (loginHolder.getTop() != 0) {
                         float loginY = (float) ((float) 1 - (page));
                         loginHolder.animate().y(loginHolder.getTop() * loginY).setDuration(0).setStartDelay(0).start();
                         loginHolderStatus = LOGINHOLDER_STATUS_VISIBLE;
-                        float welcomeImageY = ((float) 1.0 - (page * 4));
-                        //welcomeImage.animate().y(welcomeImage.getTop() * welcomeImageY).setDuration(0).setStartDelay(0).start();
-
-                        float welcomeTextY = (float) ((float) 1.0 - (page * 2.5));
+                        float welcomeImageY = welcomeImage.getTop()-y/2;
+                        float welcomeTextY = welcomeText.getTop()-y/2;
                         if (alpha > 0) {
-                            welcomeImage.animate().alpha(alpha).setDuration(0).start();
-                            welcomeText.animate().alpha(alpha).setDuration(0).start();
+                            welcomeImage.animate().alpha(alpha).y(welcomeImageY).setDuration(0).start();
+                            welcomeText.animate().alpha(alpha).y(welcomeTextY).setDuration(0).start();
                         } else {
                             welcomeImage.animate().alpha(0).setDuration(0).start();
                             welcomeText.animate().alpha(0).setDuration(0).start();
                         }
                     }
-                    mainHided = false;
+                   mainContentHidden = false;
                 }
-                if (page>=1 && page <= 3) {
-                    if(!mainHided) {
-                        mainHided = true;
+                if (page >= 1 && page <= 3) {
+                    if (!mainContentHidden) {
+                        mainContentHidden = true;
                         loginHolder.animate().y(0).setDuration(0).start();
                         welcomeImage.animate().alpha(0).setDuration(0).start();
                         welcomeText.animate().alpha(0).setDuration(0).start();
                         backToTopArrow.animate().alpha(0).setDuration(0).start();
                         backToTopText.animate().alpha(0).setDuration(0).start();
+                        lastPage.animate().alpha(0).setDuration(0).start();
                     }
                 }
                 if (page > 3) {
-
-                    float alpha = (page - 3) * 2 - 1;
-                    backToTopText.animate().alpha(alpha).setDuration(0).start();
-                    backToTopArrow.animate().alpha(alpha).setDuration(0).start();
                     float progress = page - 3;
+                    float alpha = (page - 3) * 2 - 1;
+                    if (alpha > 0) {
+                        backToTopText.animate().alpha(alpha).setDuration(0).start();
+                        backToTopArrow.animate().alpha(alpha).setDuration(0).start();
+                    }
+                    float welcomeImageScale = ((progress)/(4) +0.8f); //kinda delay
+                    if (welcomeImageScale > 1) {
+                        welcomeImageScale = 1;
+                    }
                     //status1.setText("progress:" + progress);
 
-                    if(progress>0.5){
-                        if(loginHolderStatus == LOGINHOLDER_STATUS_VISIBLE) {
+                    if (progress > 0.5) {
+                        if (loginHolderStatus == LOGINHOLDER_STATUS_VISIBLE) {
                             loginHolderStatus = LOGINHOLDER_STATUS_OUT;
-                            loginHolder.animate().y( - loginHolder.getHeight()).setDuration(200).setStartDelay(0).start();
+                            loginHolder.animate().y(-loginHolder.getHeight()).setDuration(200).setInterpolator(new AccelerateDecelerateInterpolator()).setStartDelay(0).start();
                         }
-                        welcomeImage.animate().alpha(alpha*2-0.5f).setDuration(0).start();
+                        float halfprogress = progress * 2 - 1;
+                        if (halfprogress < 0) {
+                            halfprogress = 0;
+                        }
+
+                        mainContentHidden = false;
+                        lastPage.animate()
+                                //.scaleX(welcomeImageScale).scaleY(welcomeImageScale)
+                                .y(lastPage.getHeight()/2*((1-halfprogress))).alpha(halfprogress).setDuration(0).start();
+
+
+
+                        //welcomeImage.animate().alpha(welcomeImageAlpha).setDuration(0).start();
+
                         /*if(progress>0.9) {
                             if (!welcomeShowed) {
                                 welcomeShowed = true;
@@ -153,13 +188,15 @@ public class PagerActivity extends ActionBarActivity {
                             welcomeShowed = false;
 
                         }*/
-                    }else{
-                        if(loginHolderStatus== LOGINHOLDER_STATUS_OUT) {
+                    } else {
+                        if (loginHolderStatus == LOGINHOLDER_STATUS_OUT) {
                             loginHolderStatus = LOGINHOLDER_STATUS_VISIBLE;
-                            loginHolder.animate().y(0).setDuration(200).setStartDelay(0).start();
+                            loginHolder.animate().y(0).setInterpolator(new AccelerateDecelerateInterpolator()).setDuration(200).setStartDelay(0).start();
+                        }
+                        if(!mainContentHidden){
+                            lastPage.animate().alpha(0).setDuration(0).start();
                         }
                     }
-                    mainHided= false;
                 }
 
                 //paralax.scrollTo(0, (int) (paralax.getHeight()*(page/10)));
@@ -191,5 +228,18 @@ public class PagerActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class LoginClickListener implements View.OnClickListener {
+        private final int key;
+
+        public LoginClickListener(int key) {
+            this.key = key;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Toast.makeText(PagerActivity.this, "Clicked key: " + key, Toast.LENGTH_SHORT).show();
+        }
     }
 }
