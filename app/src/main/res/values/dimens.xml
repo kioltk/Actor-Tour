@@ -2,8 +2,8 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="page_margin">-170dp</dimen><!-- этот отступ должен быть (-1*(page_margin_top+30)) чтобы внизу виднелось 15dp от слайда -->
-    <dimen name="page_margin_top">145dp</dimen>
+    <dimen name="page_margin">-162dp</dimen><!-- этот отступ должен быть (-1*(page_margin_top+25)) чтобы внизу виднелось 15dp от слайда -->
+    <dimen name="page_margin_top">136dp</dimen>
     <dimen name="arrow_bottom_margin">55dp</dimen>
     <dimen name="page_margin_bottom">50dp</dimen>
 </resources>

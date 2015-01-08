@@ -14,29 +14,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </ScrollView>
-
     <ImageView
         android:id="@+id/back_to_top_arrow"
         android:src="@drawable/intro_arrow"
         android:scaleType="centerInside"
         android:layout_centerHorizontal="true"
         android:layout_above="@+id/back_to_top"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="52dp"
         android:textColor="#fff"
         android:layout_alignRight="@id/back_to_top"
         android:layout_alignLeft="@+id/back_to_top"
         android:layout_width="wrap_content"
         android:layout_height="20dp" />
-    <TextView
-        android:id="@+id/back_to_top"
-        android:text="Back to the top"
-        android:textColor="#fff"
-        android:alpha="0"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="20dp"
-        android:padding="8dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
     <ImageView
         android:id="@+id/welcome_logo"
         android:layout_above="@+id/welcome_text"
@@ -114,6 +104,7 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
         <LinearLayout
+            android:visibility="gone"
             android:id="@+id/login_holder_last"
             android:orientation="vertical"
             android:gravity="center"
@@ -146,48 +137,60 @@
         </LinearLayout>
     </RelativeLayout>
 
+    <View
+        android:id="@+id/background"
+        android:alpha="0"
+        android:layout_alignBottom="@+id/login_holder"
+        android:background="@color/tour_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <RelativeLayout
         android:id="@+id/login_holder"
-
         android:orientation="vertical"
         android:layout_below="@+id/welcome_text"
         android:layout_centerHorizontal="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <View
-            android:id="@+id/login_holder_background"
-            android:background="#4b6e99"
-            android:alpha="0"
-            android:layout_width="match_parent"
-            android:layout_height="136dp"/>
         <Button
             android:id="@+id/signup"
-            android:enabled="false"
             android:text="sign up"
             android:textColor="#fff"
             android:textSize="14sp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="12dp"
+
             android:background="@drawable/signup"
             android:textAllCaps="true"
-            android:layout_marginBottom="12dp"
             android:layout_width="145dp"
-            android:layout_height="35dp" />
+            android:layout_height="40dp" />
         <Button
             android:id="@+id/signin"
-            android:enabled="false"
             android:layout_below="@+id/signup"
             android:text="Sign in"
-            android:layout_marginTop="12dp"
+            android:textSize="12sp"
             android:textColor="#fff"
             android:layout_centerHorizontal="true"
-            android:textAllCaps="false"
+            android:textAllCaps="true"
             android:background="#00000000"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
             android:layout_width="145dp"
-            android:layout_height="35dp" />
+            android:layout_height="30dp" />
 
 
     </RelativeLayout>
+    <TextView
+        android:id="@+id/back_to_top"
+        android:text="Back to the top"
+        android:textColor="#fff"
+        android:alpha="0"
+        android:scaleX="0"
+        android:scaleY="0"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:padding="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <!--LinearLayout
         android:gravity="right"
         android:orientation="vertical"

@@ -33,9 +33,10 @@ public class PagerActivity extends ActionBarActivity {
 
         final View paralax =  findViewById(R.id.paralax);
         final View paralaxImage =  findViewById(R.id.paralax_image);
+        final View background = findViewById(R.id.background);
 
         final View loginHolder = findViewById(R.id.login_holder);
-        final View loginHolderBackground = findViewById(R.id.login_holder_background);
+        //final View loginHolderBackground = findViewById(R.id.login_holder_background);
         final View welcomeImage = findViewById(R.id.welcome_logo);
         final View welcomeText = findViewById(R.id.welcome_text);
 
@@ -93,6 +94,7 @@ public class PagerActivity extends ActionBarActivity {
             public int loginHolderStatus;
             public boolean welcomeShowed = false;
             public boolean mainContentHidden = false;
+            public boolean loginHolderBackgroundVisible = false;
 
             @Override
             public void onScroll(int y, float page) {
@@ -102,15 +104,27 @@ public class PagerActivity extends ActionBarActivity {
                     backToTopArrow.setAlpha(alpha);
                     //status1.setText("alpha:" + alpha);
                     if (loginHolder.getTop() != 0) {
-                        float loginY = (float) ((float) 1 - (page));
-                        loginHolder.animate().y(loginHolder.getTop() * loginY).setDuration(0).setStartDelay(0).start();
-                        loginHolderBackground.animate().alpha(page).setDuration(0).start();
+                        float loginY = (float) loginHolder.getTop()*((float) 1 - (page));
+                        loginHolder.animate().y(loginY).setDuration(0).setStartDelay(0).start();
+                        background.animate().y(loginY-background.getHeight()+loginHolder.getHeight()).setDuration(0).start();
+                        /*if(loginHolderBackgroundVisible){
+                            loginHolderBackgroundVisible = false;
+                            loginHolderBackground.animate().alpha(0).setDuration(0).start();
+                        } else {
+
+                        }*/
+                        //loginHolderBackground.animate().alpha(page).setDuration(0).start();
+                        background.animate().alpha(page).setDuration(0).start();
                         loginHolderStatus = LOGINHOLDER_STATUS_VISIBLE;
                         float welcomeImageY = welcomeImage.getTop()-y/2;
                         float welcomeTextY = welcomeText.getTop()-y/2;
                         if (alpha > 0) {
-                            welcomeImage.animate().alpha(alpha).y(welcomeImageY).setDuration(0).start();
-                            welcomeText.animate().alpha(alpha).y(welcomeTextY).setDuration(0).start();
+                            welcomeImage.animate()
+                                    //.scaleX(alpha/2+0.5f).scaleY(alpha/2+0.5f)
+                                    .alpha(alpha).y(welcomeImageY).setDuration(0).start();
+                            welcomeText.animate()
+                                    //.scaleX(alpha/2+0.5f).scaleY(alpha/2+0.5f)
+                                    .alpha(alpha).y(welcomeTextY).setDuration(0).start();
                         } else {
                             welcomeImage.animate().alpha(0).setDuration(0).start();
                             welcomeText.animate().alpha(0).setDuration(0).start();
@@ -122,28 +136,37 @@ public class PagerActivity extends ActionBarActivity {
                         // todo freeze?
                         if (!mainContentHidden) {
                             mainContentHidden = true;
-
+                            loginHolderBackgroundVisible = true;
                             //signinLastView.setEnabled(false);
-                            signinView.setEnabled(false);
+                            //signinView.setEnabled(false);
                             //signupLastView.setEnabled(false);
-                            signupView.setEnabled(false);
+                            //signupView.setEnabled(false);
                             loginHolder.animate().y(0).setDuration(0).start();
-                            loginHolderBackground.animate().alpha(1).setDuration(0).start();
+                            //loginHolderBackground.animate().alpha(1).setDuration(0).start();
+                            background.animate().y(-loginHolder.getTop()).alpha(1).setDuration(0).start();
 
                             welcomeImage.animate().alpha(0).setDuration(0).start();
                             welcomeText.animate().alpha(0).setDuration(0).start();
                             backToTopArrow.animate().alpha(0).setDuration(0).start();
                             backToTopText.animate().alpha(0).setDuration(0).start();
                             lastPage.animate().alpha(0).setDuration(0).start();
+
+                        }
+                        if (page > lastPageIndex-1) {
+                            float alpha = (page - (lastPageIndex-1)) * 3 - 2;
+                            if (alpha> 0) {
+                                backToTopText.animate().scaleX(alpha).scaleY(alpha).alpha(alpha).setDuration(0).start();
+                                //backToTopArrow.animate().alpha(alpha).setDuration(0).start();
+                            }else{
+                                backToTopText.animate().scaleX(0).scaleY(0).alpha(0).setDuration(0).start();
+
+                            }
                         }
                     } else {
                         if (page > lastPageIndex) {
                             float progress = page - lastPageIndex;
                             float alpha = (page - lastPageIndex) * 2 - 1;
-                            if (alpha > 0) {
-                                backToTopText.animate().alpha(alpha).setDuration(0).start();
-                                backToTopArrow.animate().alpha(alpha).setDuration(0).start();
-                            }
+
                             float welcomeImageScale = ((progress) / (10f/3f) + 0.6f); //kinda offset
                             if (welcomeImageScale > 1) {
                                 welcomeImageScale = 1;
@@ -177,6 +200,7 @@ public class PagerActivity extends ActionBarActivity {
                                     backToTopText.animate().alpha(0).setDuration(0).start();
                                 }
                             }
+                        }else{
                         }
                     }
                 }

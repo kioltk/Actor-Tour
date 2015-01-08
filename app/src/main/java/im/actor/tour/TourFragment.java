@@ -51,6 +51,7 @@ public class TourFragment extends Fragment {
                 titleView.setText("Click login above ^^");
                 bodyView.setText("Much like actor");
                 //imageView.setImageResource(R.drawable.ic_launcher);
+
                 break;
         }
 
