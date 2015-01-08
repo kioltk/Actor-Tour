@@ -101,7 +101,7 @@ public class PagerActivity extends ActionBarActivity {
 
                 if (page < 1) {
                     float alpha = 1 - page * 2;
-                    backToTopArrow.setAlpha(alpha);
+                    backToTopArrow.animate().alpha(alpha).setDuration(0).start();
                     //status1.setText("alpha:" + alpha);
                     if (loginHolder.getTop() != 0) {
                         float loginY = (float) loginHolder.getTop()*((float) 1 - (page));
@@ -200,7 +200,6 @@ public class PagerActivity extends ActionBarActivity {
                                     backToTopText.animate().alpha(0).setDuration(0).start();
                                 }
                             }
-                        }else{
                         }
                     }
                 }

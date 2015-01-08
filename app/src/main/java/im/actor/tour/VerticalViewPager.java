@@ -487,7 +487,15 @@ public class VerticalViewPager extends ViewGroup {
     public void scrollTo(int x, int y) {
         super.scrollTo(x, y);
         if(scrollListener!=null)
-            scrollListener.onScroll(y, ((float)y/(getClientHeight()+getPageMargin())));
+            scrollListener.onScroll(y, ((float)y/(getAllHeight())));
+    }
+
+    int allHeight = 0;
+    private int getAllHeight() {
+        if(allHeight==0) {
+            allHeight = getClientHeight() + getPageMargin();
+        }
+        return allHeight;
     }
 
     /**
